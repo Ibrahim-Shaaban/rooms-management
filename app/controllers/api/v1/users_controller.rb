@@ -23,6 +23,16 @@ class Api::V1::UsersController < Api::BaseApi
     end
   end
 
+  def sign_in
+    begin
+      login_data = User::SignInService.new(user_name: params[:user_name], password: params[:password]).call
+      render json: login_data
+    rescue => e
+      render json: {error: e.message}, status: :unauthorized
+    end
+
+  end
+
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
