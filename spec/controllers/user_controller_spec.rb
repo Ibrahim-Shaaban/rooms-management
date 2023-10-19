@@ -6,7 +6,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context "given valid parameters" do
       let(:params) { { user_name: "user_new", password: "password" } }
 
-      it "creates a new driver and returns HTTP status :created" do
+      it "creates a new user and returns HTTP status :created" do
         expect {
           post :create, params: params
         }.to change(User, :count).by(1)
@@ -19,7 +19,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context "given invalid parameters" do
       let(:params) { { user_name: "", password: "" } }
 
-      it "does not create a new driver and returns HTTP status :unprocessable_entity" do
+      it "does not create a new user and returns HTTP status :unprocessable_entity" do
         expect {
           post :create, params: params
         }.not_to change(User, :count)
