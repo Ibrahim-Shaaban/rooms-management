@@ -15,12 +15,11 @@ class Api::V1::RoomsController < Api::BaseApi
 
   # POST /rooms
   def create
-    @room = Room.new(room_params)
-
-    if @room.save
-      render json: @room, status: :created, location: @room
-    else
-      render json: @room.errors, status: :unprocessable_entity
+    begin
+      @room = Room::CreateService.new(number: params[:number], room_type: params[:room_type], price_per_night: params[:price_per_night]).call 
+      render json: RoomSerializer.new(@room).serializable_hash, status: :created
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 

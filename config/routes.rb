@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :rooms
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: %i[create] do 
@@ -7,6 +6,9 @@ Rails.application.routes.draw do
           post :sign_in
         end
       end
+
+      resources :rooms
+
     end
   end
 end
