@@ -16,7 +16,7 @@ class Api::V1::UsersController < Api::BaseApi
   # POST /users
   def create
     begin
-      @user = User::CreateService.new(user_name: params[:user_name], password_digest: params[:password_digest]).call
+      @user = User::CreateService.new(user_name: params[:user_name], password_digest: params[:password]).call
       render json: @user, status: :created
     rescue => e 
        render json: {error: e.message}, status: :unprocessable_entity
@@ -55,6 +55,6 @@ class Api::V1::UsersController < Api::BaseApi
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:user_name, :password_digest)
+      params.require(:user).permit(:user_name, :password)
     end
 end
