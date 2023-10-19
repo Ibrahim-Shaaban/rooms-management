@@ -17,7 +17,7 @@ class Api::V1::UsersController < Api::BaseApi
   def create
     begin
       @user = User::CreateService.new(user_name: params[:user_name], password_digest: params[:password]).call
-      render json: @user, status: :created
+      render json: UserSerializer.new(@user).serializable_hash, status: :created
     rescue => e 
        render json: {error: e.message}, status: :unprocessable_entity
     end
