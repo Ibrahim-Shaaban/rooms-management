@@ -17,6 +17,7 @@ class Api::V1::RoomsController < Api::BaseApi
   def create
     begin
       @room = Room::CreateService.new(number: params[:number], room_type: params[:room_type], price_per_night: params[:price_per_night]).call 
+      Room.log("Room added: Number: #{@room.number}, Type: #{@room.room_type}, Night Price: #{@room.price_per_night}")
       render json: RoomSerializer.new(@room).serializable_hash, status: :created
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
