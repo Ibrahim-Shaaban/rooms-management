@@ -6,7 +6,7 @@ class Room < ApplicationRecord
     validates :room_type, presence: true
     validates :price_per_night, presence: true
 
-    has_many :reservations, dependent: :type
+    has_many :reservations, dependent: :destroy
     has_many :users, through: :reservations
 
     def self.log(message=nil)

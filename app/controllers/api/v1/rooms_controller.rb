@@ -1,5 +1,6 @@
 class Api::V1::RoomsController < Api::BaseApi
-  before_action :set_room, only: %i[ show update destroy ]
+  before_action :set_room, only: %i[ show update destroy make_reservation ]
+  before_action :authorized, only: %i[make_reservation]
 
   # GET /rooms
   def index
@@ -22,6 +23,10 @@ class Api::V1::RoomsController < Api::BaseApi
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
+  end
+
+  def make_reservation
+    render json: 'working'
   end
 
   # PATCH/PUT /rooms/1

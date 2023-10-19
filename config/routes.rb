@@ -7,7 +7,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :rooms
+      resources :rooms, only: %i[create] do 
+        member do
+          post :make_reservation
+        end
+      end
 
     end
   end
