@@ -2,8 +2,8 @@ class Room::CheckAvailableForReservationService
     
     def initialize(room:, start_date:, end_date:)
         @room = room
-        @start_date = start_date
-        @end_date = end_date
+        @start_date = Date.parse(start_date)
+        @end_date = Date.parse(start_date)
     end
 
     def call 

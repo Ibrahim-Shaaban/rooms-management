@@ -26,7 +26,16 @@ class Api::V1::RoomsController < Api::BaseApi
   end
 
   def make_reservation
-    render json: 'working'
+    begin
+      Reservation::ValidateDateRangeService.new(start_date: params[:start_date], end_date: params[:end_date]).call
+      is_room_avalilable = Room::CheckAvailableForReservationService.new(room: @room, start_date: params[:start_date], end_date: params[:end_date]).call
+      raise "this room is not available fot this date range" unless is_room_avalilable
+      reservation = Reservation::CreateService.new(room: @room, start_date: params[:start_date], end_date: params[:end_date], user: current_user).call
+      render json: ReservationSerializer.new(reservation).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+    
   end
 
   # PATCH/PUT /rooms/1
