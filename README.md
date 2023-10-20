@@ -45,6 +45,7 @@
 * user can make reservations with start date is more advanced than current date 
 * APIs require user to be authenticated : make_reservation , cancel_reservation and get all rooms
 * user can cancel reservation by using resevation_id
+* cancel reservation API reuires authroization to check if user made the request is the same user who made this reservation
 
 ## What will i do if I have more time ? 
 * register user with email and confirm his email by sending otp code to his email 
