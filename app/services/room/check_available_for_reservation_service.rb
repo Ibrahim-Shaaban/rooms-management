@@ -22,21 +22,6 @@ class Room::CheckAvailableForReservationService
         end
 
         true
-
-        # # Check for potential gaps between reservations
-        # reservations = @room.reservations.order(:start_date)
-
-        # return true if reservations.empty?  # If there are no existing reservations
-
-        # last_end_date = reservations.first.start_date
-        # reservations.each do |reservation|
-        #     if @start_date > last_end_date && @end_date < reservation.start_date
-        #         return true
-        #     end
-        #     last_end_date = reservation.end_date
-        # end
-
-        # false
         
     end
 end
