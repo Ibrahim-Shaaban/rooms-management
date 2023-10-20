@@ -48,6 +48,8 @@ class Api::V1::RoomsController < Api::BaseApi
   def cancel_reservation
     begin
       Reservation::CancelService.new(reservation: @reservation).call 
+      # we can use worker in future if we want to make complex logic and will take some time to be executed 
+      # CancelReservationWorker.perform_async(params[:reservation_id])
       render json: {message: "reservation is canceled"}
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
