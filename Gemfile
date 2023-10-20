@@ -65,3 +65,5 @@ gem 'jsonapi-serializer'
 gem 'httparty'
 gem 'sidekiq'
 gem  'sidekiq-scheduler'
+gem 'cancancan'
+

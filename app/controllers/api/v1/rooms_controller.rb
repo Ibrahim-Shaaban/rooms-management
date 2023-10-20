@@ -3,6 +3,11 @@ class Api::V1::RoomsController < Api::BaseApi
   before_action :set_reservation, only: %i[cancel_reservation]
   before_action :authenticated, only: %i[make_reservation cancel_reservation]
 
+  def current_ability
+    @current_ability ||= RoomAbility.new(current_user, params)
+  end
+  authorize_resource only: %i[ cancel_reservation ]
+
   # GET /rooms
   def index
     @rooms = Room.all
