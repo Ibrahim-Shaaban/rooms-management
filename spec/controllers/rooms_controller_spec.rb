@@ -133,5 +133,48 @@ RSpec.describe Api::V1::RoomsController, type: :controller do
     end
   end
 
+  describe 'GET #available' do
+    context 'with valid parameters' do
+      it 'returns a list of available rooms' do
+        jwt_token = JsonWebToken.encode({id: user.id}) 
+
+        request.headers['Authorization'] = "Bearer #{jwt_token}"
+        valid_start_date = Date.today + 1
+        valid_end_date = Date.today + 2
+
+        get :available, params: { start_date: valid_start_date.to_s, end_date: valid_end_date.to_s }, format: :json
+
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body)).to have_key('data')
+      end
+    end
+
+    context 'with invalid parameters' do
+      it 'returns an error message' do
+        jwt_token = JsonWebToken.encode({id: user.id}) 
+
+        request.headers['Authorization'] = "Bearer #{jwt_token}"
+        invalid_start_date = Date.today
+        invalid_end_date = Date.today - 2
+
+        get :available, params: { start_date: invalid_start_date, end_date: invalid_end_date }, format: :json
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to have_key('error')
+      end
+    end
+
+    context 'when not signed in' do
+      it 'returns an unauthorized status' do
+        valid_start_date = Date.today
+        valid_end_date = Date.today + 2
+
+        get :available, params: { start_date: valid_start_date, end_date: valid_end_date }, format: :json
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
 
 end
