@@ -95,5 +95,43 @@ RSpec.describe Api::V1::RoomsController, type: :controller do
     end
   end
 
+  let(:reservation){ create(:reservation, room: room, start_date: valid_attributes[:start_date], end_date: valid_attributes[:end_date], user: user)} 
+
+  describe 'DELETE #cancel_reservation' do
+    context 'with a valid reservation' do
+      it 'cancels the reservation' do
+        jwt_token = JsonWebToken.encode({id: user.id}) 
+
+        request.headers['Authorization'] = "Bearer #{jwt_token}"
+        reservation_count = Reservation.count
+
+        delete :cancel_reservation, params: { reservation_id: reservation.id }, format: :json
+
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'with an invalid reservation' do
+      it 'returns an error message' do
+        jwt_token = JsonWebToken.encode({id: user.id}) 
+
+        request.headers['Authorization'] = "Bearer #{jwt_token}"
+
+        delete :cancel_reservation, params: { reservation_id: 'non_existent_reservation_id' }, format: :json
+
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)).to have_key('error')
+      end
+    end
+
+    context 'when not signed in' do
+      it 'returns an unauthorized status' do
+        delete :cancel_reservation, params: { reservation_id: reservation.id }, format: :json
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
 
 end
