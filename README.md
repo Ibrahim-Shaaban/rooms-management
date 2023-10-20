@@ -51,5 +51,6 @@
 * register user with email and confirm his email by sending otp code to his email 
 * make admin management to protect APIs like add room and get all rooms
 * make API to get all reservations
+* make pagination for get all available rooms API
 
 
