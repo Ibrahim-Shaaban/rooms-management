@@ -11,6 +11,9 @@ Rails.application.routes.draw do
         member do
           post :make_reservation
         end
+        collection do
+          delete :cancel_reservation
+        end
       end
 
     end

@@ -1,6 +1,7 @@
 class Api::V1::RoomsController < Api::BaseApi
   before_action :set_room, only: %i[ show update destroy make_reservation ]
-  before_action :authenticated, only: %i[make_reservation]
+  before_action :set_reservation, only: %i[cancel_reservation]
+  before_action :authenticated, only: %i[make_reservation cancel_reservation]
 
   # GET /rooms
   def index
@@ -39,6 +40,15 @@ class Api::V1::RoomsController < Api::BaseApi
     
   end
 
+  def cancel_reservation
+    begin
+      Reservation::CancelService.new(reservation: @reservation).call 
+      render json: {message: "reservation is canceled"}
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /rooms/1
   def update
     if @room.update(room_params)
@@ -57,6 +67,10 @@ class Api::V1::RoomsController < Api::BaseApi
     # Use callbacks to share common setup or constraints between actions.
     def set_room
       @room = Room.find(params[:id])
+    end
+
+    def set_reservation
+      @reservation = Reservation.find(params[:reservation_id])
     end
 
     # Only allow a list of trusted parameters through.
