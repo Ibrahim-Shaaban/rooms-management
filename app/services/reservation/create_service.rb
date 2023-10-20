@@ -3,7 +3,7 @@ class Reservation::CreateService
     def initialize(room:, start_date:, end_date:, user:)
         @room = room
         @start_date = Date.parse(start_date)
-        @end_date = Date.parse(start_date)
+        @end_date = Date.parse(end_date)
         @user = user
     end
 
