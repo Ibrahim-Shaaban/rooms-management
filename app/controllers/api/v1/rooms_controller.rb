@@ -1,7 +1,7 @@
 class Api::V1::RoomsController < Api::BaseApi
   before_action :set_room, only: %i[ show update destroy make_reservation ]
   before_action :set_reservation, only: %i[cancel_reservation]
-  before_action :authenticated, only: %i[make_reservation cancel_reservation]
+  before_action :authenticated, only: %i[make_reservation cancel_reservation available]
 
   def current_ability
     @current_ability ||= RoomAbility.new(current_user, params)
@@ -50,6 +50,16 @@ class Api::V1::RoomsController < Api::BaseApi
       Reservation::CancelService.new(reservation: @reservation).call 
       render json: {message: "reservation is canceled"}
     rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def available
+    begin
+      Reservation::ValidateDateRangeService.new(start_date: params[:start_date], end_date: params[:end_date]).call
+      rooms = Room::AvailableForReservationService.new(start_date: params[:start_date], end_date: params[:end_date]).call
+      render json: RoomSerializer.new(rooms).serializable_hash
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end

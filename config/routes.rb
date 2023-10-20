@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         end
         collection do
           delete :cancel_reservation
+          get :available
         end
       end
 
