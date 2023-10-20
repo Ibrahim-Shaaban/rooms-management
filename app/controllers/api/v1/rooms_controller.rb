@@ -1,6 +1,6 @@
 class Api::V1::RoomsController < Api::BaseApi
   before_action :set_room, only: %i[ show update destroy make_reservation ]
-  before_action :authorized, only: %i[make_reservation]
+  before_action :authenticated, only: %i[make_reservation]
 
   # GET /rooms
   def index

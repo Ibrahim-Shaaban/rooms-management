@@ -30,7 +30,7 @@ module Api
       !!current_user
     end
 
-    def authorized
+    def authenticated
       render json: "unauthenticated user", status: :unauthorized unless logged_in?
     end
 
